@@ -1,41 +1,41 @@
 name: DOE522
 env:
-   DOE_FSA_Project:${{secrets.DOE_FSA_Project}}     
-   DOE_FSA_ID:${{secrets.DOE_FSA_ID}}   
+   DOE_FSA_Project: ${{secrets.DOE_FSA_Project}}     
+   DOE_FSA_ID: ${{secrets.DOE_FSA_ID}}   
      
 on:
   push:
      branches:
        -main
 
-  jobs:
-    Deploy-development:
-           runs-on:ubuntu-latest
+jobs:
+   Deploy-development:
+      runs-on: ubuntu-latest
 
-           steps:
-           -name:"checkout code"
-            uses:actions/checkout@4
-           -name:Install Node.js
-            uses:actions/setup-node@4
+      steps:
+         - name: "checkout code"
+           uses: actions/checkout@4
+         - name: Install Node.js
+           uses: actions/setup-node@4
 
-            -name:Install npm
-             uses:actions/setup-node@vt
-             with:
-                  node-version:'20'
-                  registry-url:'https://registry.npmjs.org/'
+         - name: Install npm
+           uses: actions/setup-node@vt
+           with:
+              node-version: '20'
+              registry-url: 'https://registry.npmjs.org/'
 
-                  -name:install dependencies
-                  run:npm install--global vercel@latest
+         - name: install dependencies
+           run: npm install--global vercel@latest
 
-                  -name: Install Vercel CLA
-                   run: npm install -- global vercel@latest
+         - name: Install Vercel CLA
+           run: npm install -- global vercel@latest
 
-                  -name:Pull Vercel Enviroment Information
-                   run:vercel pull --yes --enviroment=development --token=${{secrets. DOE_ORG_ID}}
+         - name: Pull Vercel Enviroment Information
+           run: vercel pull --yes --enviroment=development --token=${{secrets. DOE_ORG_ID}}
                    
 
-                   -name: Biuld Projects Artifacts
-                    run:vercal build--prod--token=${{secrets. DOE_ORG_ID}}
+         - name: Biuld Projects Artifacts
+           run: vercal build--prod--token=${{secrets. DOE_ORG_ID}}
 
-                    name:Deploy Projects Artifacts to Vercel
-                    run:vercel deploy--prebuilt--prod--token=${{secrets. DOE_ORG_ID}}
+         - name: Deploy Projects Artifacts to Vercel
+           run: vercel deploy--prebuilt--prod--token=${{secrets. DOE_ORG_ID}}
